@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { User, Upload, MapPin, Phone, FileText, Shield, Calendar, AlertCircle, CheckCircle, Menu, X, UserPlus } from 'lucide-react';
+import { User, Upload, MapPin, Phone, FileText, Shield, Calendar, AlertCircle, CheckCircle, Menu, X, UserPlus, Navigation, Clock } from 'lucide-react';
 import protocolsData from './protocols.json';
 import hospitalsData from './hospitals.json';
 import initialUsersData from './users.json';
+import HospitalMap from './components/HospitalMap';
+import { getCurrentPosition } from './utils/geolocation';
+import { calculateHospitalDistances } from './utils/distance';
 
 const BergenfieldEMTApp = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -21,6 +24,11 @@ const BergenfieldEMTApp = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [userLocation, setUserLocation] = useState(null);
+  const [hospitalsWithDistances, setHospitalsWithDistances] = useState(hospitalsData);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationError, setLocationError] = useState('');
+  const [showMap, setShowMap] = useState(true);
 
   // Load users from localStorage and merge with initial data
   useEffect(() => {
@@ -191,6 +199,35 @@ const BergenfieldEMTApp = () => {
       document.body.removeChild(link);
     }
   };
+
+  // Location and hospital distance functions
+  const handleGetLocation = async () => {
+    setLocationLoading(true);
+    setLocationError('');
+    
+    try {
+      const position = await getCurrentPosition();
+      setUserLocation(position);
+      
+      // Calculate distances to hospitals
+      const hospitalsWithCalculatedDistances = await calculateHospitalDistances(position, hospitals);
+      setHospitalsWithDistances(hospitalsWithCalculatedDistances);
+      
+      setLocationLoading(false);
+    } catch (error) {
+      setLocationError(error.message);
+      setLocationLoading(false);
+      // Still show hospitals with original distances if location fails
+      setHospitalsWithDistances(hospitals);
+    }
+  };
+
+  // Auto-request location when hospitals tab is accessed
+  useEffect(() => {
+    if (activeTab === 'hospitals' && !userLocation && !locationLoading) {
+      handleGetLocation();
+    }
+  }, [activeTab]);
 
   const TabButton = ({ tab, icon: Icon, label, active, onClick }) => (
     <button
@@ -601,20 +638,91 @@ const BergenfieldEMTApp = () => {
 
         {activeTab === 'hospitals' && (
           <div className="space-y-6">
+            {/* Location Status */}
+            <div className="bg-white rounded-xl shadow-sm p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Navigation className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <h3 className="font-medium text-gray-900">Location Services</h3>
+                    {locationLoading && (
+                      <p className="text-sm text-blue-600">Getting your location...</p>
+                    )}
+                    {userLocation && !locationLoading && (
+                      <p className="text-sm text-green-600">
+                        Location found - showing distances from your position
+                      </p>
+                    )}
+                    {locationError && (
+                      <p className="text-sm text-red-600">{locationError}</p>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={handleGetLocation}
+                    disabled={locationLoading}
+                    className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 text-sm"
+                  >
+                    {locationLoading ? 'Getting Location...' : 'Update Location'}
+                  </button>
+                  
+                  <button
+                    onClick={() => setShowMap(!showMap)}
+                    className="bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm"
+                  >
+                    {showMap ? 'Show List' : 'Show Map'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Interactive Map */}
+            {showMap && (
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Hospital Locations</h2>
+                <HospitalMap
+                  hospitals={hospitalsWithDistances}
+                  userLocation={userLocation}
+                  className="h-96 w-full rounded-lg border"
+                />
+              </div>
+            )}
+
+            {/* Hospital List */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Area Hospitals</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Area Hospitals {userLocation && '(Sorted by Distance)'}
+                </h2>
+                {userLocation && (
+                  <div className="text-sm text-gray-600">
+                    From your location: {userLocation.latitude.toFixed(4)}, {userLocation.longitude.toFixed(4)}
+                  </div>
+                )}
+              </div>
+              
               <div className="grid gap-4">
-                {hospitals.map((hospital, index) => (
+                {hospitalsWithDistances.map((hospital, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-semibold text-gray-900">{hospital.name}</h3>
-                      {hospital.trauma && (
-                        <span className="bg-red-100 text-red-800 text-xs font-medium px-2 py-1 rounded">
-                          Trauma Center
-                        </span>
-                      )}
+                      <div className="flex items-center space-x-2">
+                        {hospital.trauma && (
+                          <span className="bg-red-100 text-red-800 text-xs font-medium px-2 py-1 rounded">
+                            Trauma Center
+                          </span>
+                        )}
+                        {index === 0 && userLocation && (
+                          <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
+                            Closest
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="space-y-1 text-sm text-gray-600">
+                    
+                    <div className="space-y-1 text-sm text-gray-600 mb-3">
                       <div className="flex items-center space-x-2">
                         <MapPin className="w-4 h-4" />
                         <span>{hospital.address}</span>
@@ -625,17 +733,53 @@ const BergenfieldEMTApp = () => {
                           {hospital.phone}
                         </a>
                       </div>
-                      <p className="text-gray-500">Distance: {hospital.distance}</p>
+                      
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-1">
+                          <MapPin className="w-4 h-4" />
+                          <span className="font-medium">Distance: {hospital.distance}</span>
+                        </div>
+                        {hospital.travelTime && (
+                          <div className="flex items-center space-x-1">
+                            <Clock className="w-4 h-4" />
+                            <span className="font-medium">Travel: {hospital.travelTime}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
+
+                    {/* Action Buttons */}
+                    {userLocation && (
+                      <div className="flex space-x-2">
+                        <a
+                          href={`https://www.google.com/maps/dir/${userLocation.latitude},${userLocation.longitude}/${hospital.coordinates[0]},${hospital.coordinates[1]}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors flex items-center space-x-1"
+                        >
+                          <Navigation className="w-3 h-3" />
+                          <span>Directions</span>
+                        </a>
+                        <a
+                          href={`tel:${hospital.phone}`}
+                          className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition-colors flex items-center space-x-1"
+                        >
+                          <Phone className="w-3 h-3" />
+                          <span>Call</span>
+                        </a>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
               
-              <div className="mt-6 bg-blue-50 rounded-lg p-4">
-                <p className="text-sm text-blue-800">
-                  <strong>Note:</strong> In a real implementation, this would include an interactive map showing hospital locations and real-time navigation.
-                </p>
-              </div>
+              {!userLocation && !locationLoading && (
+                <div className="mt-6 bg-blue-50 rounded-lg p-4">
+                  <p className="text-sm text-blue-800">
+                    <strong>Tip:</strong> Allow location access to see real driving distances and get turn-by-turn directions to hospitals.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         )}
