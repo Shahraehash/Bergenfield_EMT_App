@@ -1,6 +1,20 @@
 [
   {
     "id": 1,
+    "name": "Admin User",
+    "email": "admin@bergenfieldemt.org",
+    "password": "admin123",
+    "role": "Admin",
+    "cprCard": {
+      "uploaded": true,
+      "expiry": "2026-01-15",
+      "verified": true
+    },
+    "lastLogin": "2025-06-24",
+    "createdAt": "2025-06-24T15:20:00.000Z"
+  },
+  {
+    "id": 2,
     "name": "John Smith",
     "email": "john.smith@bergenfieldemt.org",
     "password": "password123",
@@ -8,13 +22,15 @@
     "cprCard": {
       "uploaded": true,
       "expiry": "2025-12-15",
-      "verified": true
+      "verified": true,
+      "fileName": "john_smith_cpr.pdf",
+      "fileData": "data:application/pdf;base64,JVBERi0xLjQKJcOkw7zDtsO4CjIgMCBvYmoKPDwKL0xlbmd0aCAzIDAgUgo+PgpzdHJlYW0KeJzLSM3PyVEozy/KSVEoLU5NLMnMz1MoLinKzCtJLS5RyE9VqFYoLU4tykvMTVUoTi0pzy9KycxLt1Uy0jNQUkoD6QIA4fIZGAplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjw8Ci9MZW5ndGggMTEKPj4Kc3RyZWFtCkpvaG4gU21pdGgKZW5kc3RyZWFtCmVuZG9iagoKNCAwIG9iago8PAovVHlwZSAvUGFnZQovUGFyZW50IDUgMCBSCi9SZXNvdXJjZXMgPDwKL0ZvbnQgPDwKL0YxIDYgMCBSCj4+Cj4+Ci9NZWRpYUJveCBbMCAwIDYxMiA3OTJdCi9Db250ZW50cyAzIDAgUgo+PgplbmRvYmoKCjUgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFs0IDAgUl0KL0NvdW50IDEKL01lZGlhQm94IFswIDAgNjEyIDc5Ml0KPj4KZW5kb2JqCgo2IDAgb2JqCjw8Ci9UeXBlIC9Gb250Ci9TdWJ0eXBlIC9UeXBlMQovQmFzZUZvbnQgL0hlbHZldGljYQo+PgplbmRvYmoKCjcgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDUgMCBSCj4+CmVuZG9iagoKOCAwIG9iago8PAovVHlwZSAvSW5mbwovVGl0bGUgKEpvaG4gU21pdGggQ1BSIENlcnRpZmljYXRlKQovQXV0aG9yIChCZXJnZW5maWVsZCBFTVQpCi9DcmVhdGlvbkRhdGUgKEQ6MjAyNTA2MjQxNTIwMDBaKQo+PgplbmRvYmoKCnhyZWYKMCA5CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAwOSAwMDAwMCBuIAowMDAwMDAwMDc0IDAwMDAwIG4gCjAwMDAwMDAxMjUgMDAwMDAgbiAKMDAwMDAwMDE4NiAwMDAwMCBuIAowMDAwMDAwMzM2IDAwMDAwIG4gCjAwMDAwMDA0MDcgMDAwMDAgbiAKMDAwMDAwMDQ3NCAwMDAwMCBuIAowMDAwMDAwNTIxIDAwMDAwIG4gCnRyYWlsZXIKPDwKL1NpemUgOQovUm9vdCA3IDAgUgovSW5mbyA4IDAgUgo+PgpzdGFydHhyZWYKNjQ5CiUlRU9G"
     },
     "lastLogin": "2025-06-09",
     "createdAt": "2025-06-24T15:20:00.000Z"
   },
   {
-    "id": 2,
+    "id": 3,
     "name": "Sarah Johnson",
     "email": "sarah.j@bergenfieldemt.org",
     "password": "password123",
@@ -22,9 +38,27 @@
     "cprCard": {
       "uploaded": true,
       "expiry": "2025-08-20",
-      "verified": false
+      "verified": false,
+      "fileName": "sarah_johnson_cpr.pdf",
+      "fileData": "data:application/pdf;base64,JVBERi0xLjQKJcOkw7zDtsO4CjIgMCBvYmoKPDwKL0xlbmd0aCAzIDAgUgo+PgpzdHJlYW0KeJzLSM3PyVEozy/KSVEoLU5NLMnMz1MoLinKzCtJLS5RyE9VqFYoLU4tykvMTVUoTi0pzy9KycxLt1Uy0jNQUkoD6QIA4fIZGAplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjw8Ci9MZW5ndGggMTMKPj4Kc3RyZWFtClNhcmFoIEpvaG5zb24KZW5kc3RyZWFtCmVuZG9iagoKNCAwIG9iago8PAovVHlwZSAvUGFnZQovUGFyZW50IDUgMCBSCi9SZXNvdXJjZXMgPDwKL0ZvbnQgPDwKL0YxIDYgMCBSCj4+Cj4+Ci9NZWRpYUJveCBbMCAwIDYxMiA3OTJdCi9Db250ZW50cyAzIDAgUgo+PgplbmRvYmoKCjUgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFs0IDAgUl0KL0NvdW50IDEKL01lZGlhQm94IFswIDAgNjEyIDc5Ml0KPj4KZW5kb2JqCgo2IDAgb2JqCjw8Ci9UeXBlIC9Gb250Ci9TdWJ0eXBlIC9UeXBlMQovQmFzZUZvbnQgL0hlbHZldGljYQo+PgplbmRvYmoKCjcgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDUgMCBSCj4+CmVuZG9iagoKOCAwIG9iago8PAovVHlwZSAvSW5mbwovVGl0bGUgKFNhcmFoIEpvaG5zb24gQ1BSIENlcnRpZmljYXRlKQovQXV0aG9yIChCZXJnZW5maWVsZCBFTVQpCi9DcmVhdGlvbkRhdGUgKEQ6MjAyNTA2MjQxNTIwMDBaKQo+PgplbmRvYmoKCnhyZWYKMCA5CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAwOSAwMDAwMCBuIAowMDAwMDAwMDc0IDAwMDAwIG4gCjAwMDAwMDAxMjcgMDAwMDAgbiAKMDAwMDAwMDE4OCAwMDAwMCBuIAowMDAwMDAwMzM4IDAwMDAwIG4gCjAwMDAwMDA0MDkgMDAwMDAgbiAKMDAwMDAwMDQ3NiAwMDAwMCBuIAowMDAwMDAwNTIzIDAwMDAwIG4gCnRyYWlsZXIKPDwKL1NpemUgOQovUm9vdCA3IDAgUgovSW5mbyA4IDAgUgo+PgpzdGFydHhyZWYKNjUxCiUlRU9G"
     },
     "lastLogin": "2025-06-08",
+    "createdAt": "2025-06-24T15:20:00.000Z"
+  },
+  {
+    "id": 4,
+    "name": "Mike Davis",
+    "email": "mike.davis@bergenfieldemt.org",
+    "password": "password123",
+    "role": "EMT-A",
+    "cprCard": {
+      "uploaded": true,
+      "expiry": "2025-10-30",
+      "verified": false,
+      "fileName": "mike_davis_cpr.pdf",
+      "fileData": "data:application/pdf;base64,JVBERi0xLjQKJcOkw7zDtsO4CjIgMCBvYmoKPDwKL0xlbmd0aCAzIDAgUgo+PgpzdHJlYW0KeJzLSM3PyVEozy/KSVEoLU5NLMnMz1MoLinKzCtJLS5RyE9VqFYoLU4tykvMTVUoTi0pzy9KycxLt1Uy0jNQUkoD6QIA4fIZGAplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjw8Ci9MZW5ndGggMTAKPj4Kc3RyZWFtCk1pa2UgRGF2aXMKZW5kc3RyZWFtCmVuZG9iagoKNCAwIG9iago8PAovVHlwZSAvUGFnZQovUGFyZW50IDUgMCBSCi9SZXNvdXJjZXMgPDwKL0ZvbnQgPDwKL0YxIDYgMCBSCj4+Cj4+Ci9NZWRpYUJveCBbMCAwIDYxMiA3OTJdCi9Db250ZW50cyAzIDAgUgo+PgplbmRvYmoKCjUgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFs0IDAgUl0KL0NvdW50IDEKL01lZGlhQm94IFswIDAgNjEyIDc5Ml0KPj4KZW5kb2JqCgo2IDAgb2JqCjw8Ci9UeXBlIC9Gb250Ci9TdWJ0eXBlIC9UeXBlMQovQmFzZUZvbnQgL0hlbHZldGljYQo+PgplbmRvYmoKCjcgMCBvYmoKPDwKL1R5cGUgL0NhdGFsb2cKL1BhZ2VzIDUgMCBSCj4+CmVuZG9iagoKOCAwIG9iago8PAovVHlwZSAvSW5mbwovVGl0bGUgKE1pa2UgRGF2aXMgQ1BSIENlcnRpZmljYXRlKQovQXV0aG9yIChCZXJnZW5maWVsZCBFTVQpCi9DcmVhdGlvbkRhdGUgKEQ6MjAyNTA2MjQxNTIwMDBaKQo+PgplbmRvYmoKCnhyZWYKMCA5CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAwOSAwMDAwMCBuIAowMDAwMDAwMDc0IDAwMDAwIG4gCjAwMDAwMDAxMjQgMDAwMDAgbiAKMDAwMDAwMDE4NCAwMDAwMCBuIAowMDAwMDAwMzM0IDAwMDAwIG4gCjAwMDAwMDA0MDUgMDAwMDAgbiAKMDAwMDAwMDQ3MiAwMDAwMCBuIAowMDAwMDAwNTE5IDAwMDAwIG4gCnRyYWlsZXIKPDwKL1NpemUgOQovUm9vdCA3IDAgUgovSW5mbyA4IDAgUgo+PgpzdGFydHhyZWYKNjQ3CiUlRU9G"
+    },
+    "lastLogin": "2025-06-07",
     "createdAt": "2025-06-24T15:20:00.000Z"
   }
 ]

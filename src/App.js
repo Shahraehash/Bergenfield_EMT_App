@@ -189,15 +189,35 @@ const BergenfieldEMTApp = () => {
     setCurrentUser(updatedUser);
   };
 
-  const handleDownloadCPRCard = () => {
-    if (currentUser.cprCard.fileData) {
+  const handleDownloadCPRCard = (user = currentUser) => {
+    if (user.cprCard.fileData) {
       const link = document.createElement('a');
-      link.href = currentUser.cprCard.fileData;
-      link.download = currentUser.cprCard.fileName || 'cpr-card.pdf';
+      link.href = user.cprCard.fileData;
+      link.download = user.cprCard.fileName || `${user.name.replace(/\s+/g, '_')}_cpr_card.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
+  };
+
+  const handleVerifyCPR = (userId) => {
+    const updatedUsers = users.map(u => 
+      u.id === userId 
+        ? { ...u, cprCard: { ...u.cprCard, verified: true, verifiedDate: new Date().toISOString() } }
+        : u
+    );
+    saveUsers(updatedUsers);
+    
+    // Update current user if they are the one being verified
+    if (currentUser.id === userId) {
+      setCurrentUser(prev => ({ 
+        ...prev, 
+        cprCard: { ...prev.cprCard, verified: true, verifiedDate: new Date().toISOString() } 
+      }));
+    }
+    
+    setSuccess('CPR certification verified successfully!');
+    setTimeout(() => setSuccess(''), 3000);
   };
 
   // Location and hospital distance functions
@@ -318,7 +338,9 @@ const BergenfieldEMTApp = () => {
               </button>
               
               <div className="mt-6 text-center text-sm text-gray-600">
-                Demo: Use john.smith@bergenfieldemt.org with password "password123"
+                <p>Demo accounts:</p>
+                <p>User: john.smith@bergenfieldemt.org / password123</p>
+                <p>Admin: admin@bergenfieldemt.org / admin123</p>
               </div>
             </div>
           ) : (
@@ -463,7 +485,7 @@ const BergenfieldEMTApp = () => {
                   active={activeTab === 'protocols'}
                   onClick={() => setActiveTab('protocols')}
                 />
-                {currentUser.email === 'admin@bergenfieldemt.org' && (
+                {currentUser.role === 'Admin' && (
                   <TabButton
                     tab="admin"
                     icon={Shield}
@@ -816,38 +838,174 @@ const BergenfieldEMTApp = () => {
 
         {activeTab === 'admin' && (
           <div className="space-y-6">
+            {/* Success Message */}
+            {success && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-sm text-green-600">{success}</p>
+              </div>
+            )}
+
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">User Management</h2>
-              <div className="space-y-4">
-                {users.map((user) => (
-                  <div key={user.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-semibold text-gray-900">{user.name}</h3>
-                        <p className="text-sm text-gray-600">{user.email}</p>
-                        <p className="text-sm text-gray-600">Role: {user.role}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="flex items-center space-x-2 mb-1">
-                          {user.cprCard.verified ? (
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                          ) : (
-                            <AlertCircle className="w-4 h-4 text-yellow-500" />
-                          )}
-                          <span className="text-sm">
-                            {user.cprCard.verified ? 'Verified' : 'Pending'}
-                          </span>
-                        </div>
-                        {!user.cprCard.verified && (
-                          <button className="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
-                            Verify CPR
-                          </button>
-                        )}
-                      </div>
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">User Management Dashboard</h2>
+              
+              {/* Summary Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-blue-50 rounded-lg p-4">
+                  <div className="flex items-center">
+                    <User className="w-8 h-8 text-blue-600 mr-3" />
+                    <div>
+                      <p className="text-sm font-medium text-blue-600">Total Users</p>
+                      <p className="text-2xl font-bold text-blue-900">{users.length}</p>
                     </div>
                   </div>
-                ))}
+                </div>
+                
+                <div className="bg-green-50 rounded-lg p-4">
+                  <div className="flex items-center">
+                    <CheckCircle className="w-8 h-8 text-green-600 mr-3" />
+                    <div>
+                      <p className="text-sm font-medium text-green-600">Verified CPR</p>
+                      <p className="text-2xl font-bold text-green-900">
+                        {users.filter(u => u.cprCard.verified).length}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-yellow-50 rounded-lg p-4">
+                  <div className="flex items-center">
+                    <AlertCircle className="w-8 h-8 text-yellow-600 mr-3" />
+                    <div>
+                      <p className="text-sm font-medium text-yellow-600">Pending</p>
+                      <p className="text-2xl font-bold text-yellow-900">
+                        {users.filter(u => !u.cprCard.verified && u.cprCard.uploaded).length}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-red-50 rounded-lg p-4">
+                  <div className="flex items-center">
+                    <Upload className="w-8 h-8 text-red-600 mr-3" />
+                    <div>
+                      <p className="text-sm font-medium text-red-600">No CPR Card</p>
+                      <p className="text-2xl font-bold text-red-900">
+                        {users.filter(u => !u.cprCard.uploaded).length}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              {/* User List */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">All Users</h3>
+                {users.filter(u => u.role !== 'Admin').map((user) => {
+                  const isExpiringSoon = user.cprCard.expiry && 
+                    new Date(user.cprCard.expiry) <= new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+                  const isExpired = user.cprCard.expiry && 
+                    new Date(user.cprCard.expiry) < new Date();
+
+                  return (
+                    <div key={user.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-3 mb-2">
+                            <h3 className="font-semibold text-gray-900">{user.name}</h3>
+                            <span className="bg-gray-100 text-gray-800 text-xs font-medium px-2 py-1 rounded">
+                              {user.role}
+                            </span>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+                            <div>
+                              <p><strong>Email:</strong> {user.email}</p>
+                              <p><strong>Last Login:</strong> {user.lastLogin}</p>
+                            </div>
+                            
+                            <div>
+                              <p><strong>CPR Status:</strong> 
+                                <span className={`ml-1 ${
+                                  user.cprCard.verified ? 'text-green-600' : 
+                                  user.cprCard.uploaded ? 'text-yellow-600' : 'text-red-600'
+                                }`}>
+                                  {user.cprCard.verified ? 'Verified' : 
+                                   user.cprCard.uploaded ? 'Pending Verification' : 'Not Uploaded'}
+                                </span>
+                              </p>
+                              
+                              {user.cprCard.expiry && (
+                                <p><strong>CPR Expires:</strong> 
+                                  <span className={`ml-1 ${
+                                    isExpired ? 'text-red-600 font-semibold' :
+                                    isExpiringSoon ? 'text-yellow-600 font-semibold' : 'text-gray-600'
+                                  }`}>
+                                    {new Date(user.cprCard.expiry).toLocaleDateString()}
+                                    {isExpired && ' (EXPIRED)'}
+                                    {isExpiringSoon && !isExpired && ' (Expires Soon)'}
+                                  </span>
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex flex-col space-y-2 ml-4">
+                          {/* Verification Status Badge */}
+                          <div className="flex items-center space-x-2">
+                            {user.cprCard.verified ? (
+                              <div className="flex items-center space-x-1">
+                                <CheckCircle className="w-4 h-4 text-green-500" />
+                                <span className="text-sm text-green-700 font-medium">Verified</span>
+                              </div>
+                            ) : user.cprCard.uploaded ? (
+                              <div className="flex items-center space-x-1">
+                                <AlertCircle className="w-4 h-4 text-yellow-500" />
+                                <span className="text-sm text-yellow-700 font-medium">Pending</span>
+                              </div>
+                            ) : (
+                              <div className="flex items-center space-x-1">
+                                <AlertCircle className="w-4 h-4 text-red-500" />
+                                <span className="text-sm text-red-700 font-medium">No CPR Card</span>
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Action Buttons */}
+                          <div className="flex flex-col space-y-1">
+                            {user.cprCard.uploaded && user.cprCard.fileData && (
+                              <button
+                                onClick={() => handleDownloadCPRCard(user)}
+                                className="text-xs bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors flex items-center space-x-1"
+                              >
+                                <FileText className="w-3 h-3" />
+                                <span>Download PDF</span>
+                              </button>
+                            )}
+                            
+                            {user.cprCard.uploaded && !user.cprCard.verified && (
+                              <button
+                                onClick={() => handleVerifyCPR(user.id)}
+                                className="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors flex items-center space-x-1"
+                              >
+                                <CheckCircle className="w-3 h-3" />
+                                <span>Verify CPR</span>
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              {users.filter(u => u.role !== 'Admin').length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                  <User className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <p>No users found</p>
+                </div>
+              )}
             </div>
           </div>
         )}
