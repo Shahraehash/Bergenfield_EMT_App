@@ -1,32 +1,37 @@
 [
   {
     "id": "CARD-1",
-    "title": "Cardiac Arrest",
+    "title": "Atraumatic Chest Pain/Discomfort",
     "category": "Cardiac",
-    "content": "Begin CPR immediately. Attach AED/Monitor. Establish IV/IO access. Epinephrine 1mg IV/IO every 3-5 minutes. Consider reversible causes (H's and T's)."
+    "content": "Begin CPR immediately. Attach AED/Monitor. Establish IV/IO access. Epinephrine 1mg IV/IO every 3-5 minutes. Consider reversible causes (H's and T's).",
+    "url": "https://www.nj.gov/health/ems/documents/education/Atraumatic%20Chest%20Pain%20Protocol%20Final%206.21.2018.pdf"
   },
   {
     "id": "RESP-1",
     "title": "Respiratory Distress",
     "category": "Respiratory",
-    "content": "Assess airway, breathing, circulation. Administer oxygen as needed. Consider albuterol for bronchospasm. Prepare for advanced airway if indicated."
-  },
-  {
-    "id": "TRAU-1",
-    "title": "Trauma Assessment",
-    "category": "Trauma",
-    "content": "Scene safety first. Primary assessment: ABCDE. Control bleeding. Immobilize spine if indicated. Rapid transport for trauma alerts."
+    "content": "Assess airway, breathing, circulation. Administer oxygen as needed. Consider albuterol for bronchospasm. Prepare for advanced airway if indicated.",
+    "url": "https://www.nj.gov/health/ems/documents/education/Revised%20Respiratory%20Protocol%20-%20Oct2017.pdf"
   },
   {
     "id": "ANES-1",
     "title": "Anaphylaxis",
     "category": "Allergic",
-    "content": "Epinephrine 0.3mg IM (EpiPen). High-flow oxygen. IV access. Consider diphenhydramine 25-50mg IV. Transport immediately."
+    "content": "Epinephrine 0.3mg IM (EpiPen). High-flow oxygen. IV access. Consider diphenhydramine 25-50mg IV. Transport immediately.",
+    "url": "https://www.nj.gov/health/ems/documents/education/anaphylaxis_protocol.pdf"
   },
   {
-    "id": "SEIZ-1",
-    "title": "Seizures",
-    "category": "Neurological",
-    "content": "Protect airway. Do not restrain. Check glucose. If status epilepticus: Midazolam 5mg IN/IM or Lorazepam 2mg IV."
+    "id": "OVER-1",
+    "title": "Opiate Overdose",
+    "category": "Overdose",
+    "content": "Assess airway, breathing, circulation. Administer naloxone (Narcan) as per protocol. Provide ventilatory support as needed. Monitor for re-sedation.",
+    "url": "https://www.nj.gov/health/ems/documents/Waiver%20P3%20-%20Naloxone%20Administration.PDF"
+  },
+  {
+    "id": "SPIN-1",
+    "title": "EMS Spinal Motion Restriction",
+    "category": "Trauma",
+    "content": "Assess mechanism of injury and neurological status. Apply spinal motion restriction based on clinical criteria and patient presentation.",
+    "url": "https://www.nj.gov/health/ems/documents/education/smr_position_statement.pdf"
   }
 ]

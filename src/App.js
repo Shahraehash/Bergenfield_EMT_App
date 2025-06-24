@@ -812,26 +812,43 @@ const BergenfieldEMTApp = () => {
               <h2 className="text-xl font-semibold text-gray-900 mb-4">NJ BLS Medical Protocols</h2>
               <div className="space-y-4">
                 {protocols.map((protocol) => (
-                  <div key={protocol.id} className="border border-gray-200 rounded-lg p-4">
+                  <div 
+                    key={protocol.id} 
+                    className={`border border-gray-200 rounded-lg p-4 transition-colors ${
+                      protocol.url ? 'hover:bg-gray-50 cursor-pointer hover:border-blue-300' : ''
+                    }`}
+                    onClick={() => {
+                      if (protocol.url) {
+                        window.open(protocol.url, '_blank', 'noopener,noreferrer');
+                      }
+                    }}
+                  >
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-semibold text-gray-900">{protocol.title}</h3>
+                      <div className="flex items-center space-x-2">
+                        <h3 className="font-semibold text-gray-900">{protocol.title}</h3>
+                        {protocol.url && (
+                          <FileText className="w-4 h-4 text-blue-600" />
+                        )}
+                      </div>
                       <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">
                         {protocol.category}
                       </span>
                     </div>
                     <p className="text-sm text-gray-700 leading-relaxed">{protocol.content}</p>
-                    <div className="mt-2 text-xs text-gray-500">
-                      Protocol ID: {protocol.id}
+                    <div className="flex justify-between items-center mt-2">
+                      <div className="text-xs text-gray-500">
+                        Protocol ID: {protocol.id}
+                      </div>
+                      {protocol.url && (
+                        <div className="text-xs text-blue-600 font-medium">
+                          Click to view full protocol PDF
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
               </div>
               
-              <div className="mt-6 bg-yellow-50 rounded-lg p-4">
-                <p className="text-sm text-yellow-800">
-                  <strong>Disclaimer:</strong> These are simplified examples. Actual NJ BLS protocols should be obtained from official sources and include complete medical direction guidelines.
-                </p>
-              </div>
             </div>
           </div>
         )}
