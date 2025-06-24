@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "John Smith",
+    "email": "john.smith@bergenfieldemt.org",
+    "password": "password123",
+    "role": "EMT-B",
+    "cprCard": {
+      "uploaded": true,
+      "expiry": "2025-12-15",
+      "verified": true
+    },
+    "lastLogin": "2025-06-09",
+    "createdAt": "2025-06-24T15:20:00.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Sarah Johnson",
+    "email": "sarah.j@bergenfieldemt.org",
+    "password": "password123",
+    "role": "Paramedic",
+    "cprCard": {
+      "uploaded": true,
+      "expiry": "2025-08-20",
+      "verified": false
+    },
+    "lastLogin": "2025-06-08",
+    "createdAt": "2025-06-24T15:20:00.000Z"
+  }
+]

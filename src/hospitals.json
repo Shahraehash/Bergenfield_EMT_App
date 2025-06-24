@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Holy Name Medical Center",
+    "address": "718 Teaneck Rd, Teaneck, NJ 07666",
+    "phone": "(201) 833-3000",
+    "trauma": true,
+    "distance": "2.1 miles"
+  },
+  {
+    "name": "Hackensack University Medical Center",
+    "address": "30 Prospect Ave, Hackensack, NJ 07601",
+    "phone": "(551) 996-2000",
+    "trauma": true,
+    "distance": "4.8 miles"
+  },
+  {
+    "name": "Englewood Hospital",
+    "address": "350 Engle St, Englewood, NJ 07631",
+    "phone": "(201) 894-3000",
+    "trauma": false,
+    "distance": "3.2 miles"
+  },
+  {
+    "name": "Valley Hospital",
+    "address": "223 N Van Dien Ave, Ridgewood, NJ 07450",
+    "phone": "(201) 447-8000",
+    "trauma": false,
+    "distance": "6.1 miles"
+  }
+]
